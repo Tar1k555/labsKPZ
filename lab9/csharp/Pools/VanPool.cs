@@ -63,7 +63,7 @@ namespace DeliverySystem.Pools
                 van.ResetState();
                 _inUseVans.Remove(van);
                 _availableVans.Add(van);
-                Monitor.Pulse(this); // Сповістити потоки, що очікують
+                Monitor.Pulse(this); //cповістити потоки, що очікують
             }
         }
 

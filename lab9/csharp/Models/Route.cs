@@ -18,19 +18,18 @@ namespace DeliverySystem.Models
             Stops = new List<string>(stops);
         }
 
-        // Конструктор для глибокого клонування
         protected Route(Route other)
         {
             Name = other.Name;
             Courier = other.Courier;
             WeightLimitKg = other.WeightLimitKg;
-            Stops = new List<string>(other.Stops); // Глибока копія списку зупинок
+            Stops = new List<string>(other.Stops);
         }
 
         public void LoadExpensiveConfiguration()
         {
             Console.WriteLine($"[{DateTime.Now:HH:mm:ss}] [RouteBuilder] Початок побудови еталонного маршруту '{Name}'...");
-            Thread.Sleep(1500); // Емуляція «дорогої» операції
+            Thread.Sleep(1500);
             Console.WriteLine($"[{DateTime.Now:HH:mm:ss}] [RouteBuilder] Маршрут '{Name}' успішно побудовано та завантажено в пам'ять.");
         }
 
