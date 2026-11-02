@@ -1,0 +1,17 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+class WaybillNumberingService <<Singleton>> {
+  - instance : WaybillNumberingService {static}
+  - counter : AtomicLong
+  - WaybillNumberingService()
+  + getInstance() : WaybillNumberingService {static}
+  + generateNextNumber(sourceName : String) : String
+}
+
+class Main <<Client>> {
+  + main() {static}
+}
+
+Main ..> WaybillNumberingService : використовує
+@enduml
