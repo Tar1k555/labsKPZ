@@ -1,0 +1,81 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+interface Delivery <<Product>> {
+  + calculateCost(weightKg : double) : double
+  + calculateDeliveryDays() : int
+  + getExecutorType() : String
+  + getTypeName() : String
+}
+
+class CourierDelivery <<ConcreteProduct>> {
+  + calculateCost(weightKg : double) : double
+  + calculateDeliveryDays() : int
+  + getExecutorType() : String
+  + getTypeName() : String
+}
+
+class ParcelLockerDelivery <<ConcreteProduct>> {
+  + calculateCost(weightKg : double) : double
+  + calculateDeliveryDays() : int
+  + getExecutorType() : String
+  + getTypeName() : String
+}
+
+class BranchDelivery <<ConcreteProduct>> {
+  + calculateCost(weightKg : double) : double
+  + calculateDeliveryDays() : int
+  + getExecutorType() : String
+  + getTypeName() : String
+}
+
+class FloorDelivery <<ConcreteProduct>> {
+  + calculateCost(weightKg : double) : double
+  + calculateDeliveryDays() : int
+  + getExecutorType() : String
+  + getTypeName() : String
+}
+
+abstract class DeliveryProcess <<Creator>> {
+  # createDelivery() : Delivery {abstract}
+  + registerDelivery(shipmentId : String, address : String, weightKg : double) : void
+}
+
+class CourierDeliveryProcess <<ConcreteCreator>> {
+  # createDelivery() : Delivery
+}
+
+class ParcelLockerDeliveryProcess <<ConcreteCreator>> {
+  # createDelivery() : Delivery
+}
+
+class BranchDeliveryProcess <<ConcreteCreator>> {
+  # createDelivery() : Delivery
+}
+
+class FloorDeliveryProcess <<ConcreteCreator>> {
+  # createDelivery() : Delivery
+}
+
+Delivery <|.. CourierDelivery
+Delivery <|.. ParcelLockerDelivery
+Delivery <|.. BranchDelivery
+Delivery <|.. FloorDelivery
+
+DeliveryProcess <|-- CourierDeliveryProcess
+DeliveryProcess <|-- ParcelLockerDeliveryProcess
+DeliveryProcess <|-- BranchDeliveryProcess
+DeliveryProcess <|-- FloorDeliveryProcess
+
+DeliveryProcess ..> Delivery : створює
+CourierDeliveryProcess ..> CourierDelivery : створює
+ParcelLockerDeliveryProcess ..> ParcelLockerDelivery : створює
+BranchDeliveryProcess ..> BranchDelivery : створює
+FloorDeliveryProcess ..> FloorDelivery : створює
+
+note top of DeliveryProcess
+  Метод registerDelivery() реалізує
+  загальний процес і викликає
+  абстрактний метод createDelivery()
+end note
+@enduml
