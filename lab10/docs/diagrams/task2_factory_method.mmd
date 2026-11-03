@@ -1,0 +1,40 @@
+classDiagram
+    direction TB
+
+    class DeliveryResult {
+        +String MethodName
+        +Decimal Cost
+        +Int Days
+        +String Destination
+        +ToString() String
+    }
+    note for DeliveryResult "Product"
+
+    class ShipmentProcessor {
+        <<abstract>>
+        +CalculateSpecificDelivery(destination: String)* DeliveryResult
+        +ProcessDelivery(shipmentId: String, destination: String) Void
+    }
+    note for ShipmentProcessor "Creator"
+
+    class CourierDeliveryCreator {
+        +CalculateSpecificDelivery(destination: String) DeliveryResult
+    }
+    class PostmatDeliveryCreator {
+        +CalculateSpecificDelivery(destination: String) DeliveryResult
+    }
+    class BranchDeliveryCreator {
+        +CalculateSpecificDelivery(destination: String) DeliveryResult
+    }
+    class FloorDeliveryCreator {
+        +CalculateSpecificDelivery(destination: String) DeliveryResult
+    }
+    note for FloorDeliveryCreator "New ConcreteCreator"
+
+    ShipmentProcessor <|-- CourierDeliveryCreator : Inheritance
+    ShipmentProcessor <|-- PostmatDeliveryCreator : Inheritance
+    ShipmentProcessor <|-- BranchDeliveryCreator : Inheritance
+    ShipmentProcessor <|-- FloorDeliveryCreator : Inheritance
+
+    ShipmentProcessor ..> DeliveryResult : Creates
+    

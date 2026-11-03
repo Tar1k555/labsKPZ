@@ -1,0 +1,60 @@
+classDiagram
+    direction TB
+
+    class IDeliveryFactory {
+        <<interface>>
+        +CreateBox() IBox
+        +CreateFiller() IFiller
+        +CreateLabel() ILabel
+    }
+    note for IDeliveryFactory "AbstractFactory"
+
+    class RegularPackagingFactory {
+        +CreateBox() IBox
+        +CreateFiller() IFiller
+        +CreateLabel() ILabel
+    }
+    class FragilePackagingFactory {
+        +CreateBox() IBox
+        +CreateFiller() IFiller
+        +CreateLabel() ILabel
+    }
+    class ColdPackagingFactory {
+        +CreateBox() IBox
+        +CreateFiller() IFiller
+        +CreateLabel() ILabel
+    }
+    class OversizedPackagingFactory {
+        +CreateBox() IBox
+        +CreateFiller() IFiller
+        +CreateLabel() ILabel
+    }
+
+    IDeliveryFactory <|.. RegularPackagingFactory : Realization
+    IDeliveryFactory <|.. FragilePackagingFactory : Realization
+    IDeliveryFactory <|.. ColdPackagingFactory : Realization
+    IDeliveryFactory <|.. OversizedPackagingFactory : Realization
+
+    class IBox {
+        <<interface>>
+        +GetDescription() String
+    }
+    class IFiller {
+        <<interface>>
+        +GetDescription() String
+    }
+    class ILabel {
+        <<interface>>
+        +GetDescription() String
+    }
+
+    class PackagingDepartment {
+        +PackShipment(factory: IDeliveryFactory, shipmentName: String) Void
+    }
+    note for PackagingDepartment "Client"
+
+    PackagingDepartment ..> IDeliveryFactory : Dependency
+    PackagingDepartment ..> IBox : Dependency
+    PackagingDepartment ..> IFiller : Dependency
+    PackagingDepartment ..> ILabel : Dependency
+    
