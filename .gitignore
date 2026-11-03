@@ -1,0 +1,9 @@
+# .NET / C#
+[Oo]bj/
+[Bb]in/
+.vs/
+
+# Java / Maven
+target/
+*.class
+
