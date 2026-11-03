@@ -1,0 +1,37 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+interface Cloneable <<java.lang>>
+
+class DeliveryRoute <<Prototype>> {
+  - routeName : String
+  - assignedDriver : String
+  - stops : List<RouteStop>
+  - weightConstraint : WeightConstraint
+  + DeliveryRoute(routeName : String, stops : List<RouteStop>, weightConstraint : WeightConstraint)
+  + addStop(stop : RouteStop) : void
+  + setAssignedDriver(driver : String) : void
+  + clone() : DeliveryRoute
+  + printDetails(label : String) : void
+}
+
+class RouteStop <<ConcretePrototype>> {
+  - cityName : String
+  - warehouseContact : String
+  + RouteStop(cityName : String, warehouseContact : String)
+  + clone() : RouteStop
+}
+
+class WeightConstraint <<ConcretePrototype>> {
+  - maxWeightKg : double
+  + WeightConstraint(maxWeightKg : double)
+  + clone() : WeightConstraint
+}
+
+DeliveryRoute ..|> Cloneable
+RouteStop ..|> Cloneable
+WeightConstraint ..|> Cloneable
+
+DeliveryRoute "1" *-- "many" RouteStop : містить (глубоке клонування)
+DeliveryRoute "1" *-- "1" WeightConstraint : містить (глубоке клонування)
+@enduml
