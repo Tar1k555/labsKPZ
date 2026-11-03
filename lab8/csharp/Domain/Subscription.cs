@@ -22,21 +22,20 @@ namespace Variant3_FitnessMembership.Domain
             StartDate = startDate;
             Status = "Draft";
 
-            CalculateCost(); // Information Expert обчислює вартість сам
+            CalculateCost();
         }
 
-        // Information Expert: сутність сама знає як рахувати свою вартість
         private void CalculateCost()
         {
             decimal rawCost = Plan.BaseMonthlyRate * Plan.MonthsDuration;
 
             if (Plan.Code == "VIP")
             {
-                rawCost += 5000m; // Персональна шафка та СПА
+                rawCost += 5000m;
             }
             else if (Plan.Code == "Day")
             {
-                rawCost *= 0.8m; // Знижка на денне відвідування
+                rawCost *= 0.8m;
             }
 
             if (PersonalTrainerIncluded)

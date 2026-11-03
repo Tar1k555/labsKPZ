@@ -11,10 +11,10 @@ public abstract class DeliveryProcess {
     public void registerDelivery(String shipmentId, String destinationAddress, double weightKg) {
         ConsoleLogger.log("DeliveryProcess", "Початок оформлення відправлення " + shipmentId);
         ConsoleLogger.log("DeliveryProcess", "1. Перевірка адреси: " + destinationAddress);
-        
+
         // Виклик Фабричного Методу
         Delivery delivery = createDelivery();
-        
+
         double cost = delivery.calculateCost(weightKg);
         int days = delivery.calculateDeliveryDays();
         String executor = delivery.getExecutorType();

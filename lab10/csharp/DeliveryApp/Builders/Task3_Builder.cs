@@ -2,7 +2,6 @@ using System;
 
 namespace DeliveryApp.Builders
 {
-    // Готовий об'єкт накладної
     public class Waybill
     {
         public string Sender { get; set; }
@@ -24,7 +23,6 @@ namespace DeliveryApp.Builders
         }
     }
 
-    // Інтерфейс будівельника
     public interface WaybillBuilder
     {
         void SetSender(string sender);
@@ -36,7 +34,6 @@ namespace DeliveryApp.Builders
         Waybill Build();
     }
 
-    // Конкретний будівельник з перевірками на завершальному кроці
     public class StandardWaybillBuilder : WaybillBuilder
     {
         private Waybill _waybill = new Waybill();
@@ -73,7 +70,6 @@ namespace DeliveryApp.Builders
         }
     }
 
-    // Директор для створення типових накладних
     public class WaybillDirector
     {
         private readonly WaybillBuilder _builder;
