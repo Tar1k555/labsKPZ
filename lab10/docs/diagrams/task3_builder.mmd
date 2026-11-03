@@ -1,0 +1,52 @@
+classDiagram
+    direction TB
+
+    class Waybill {
+        +String Sender
+        +String ReceiverName
+        +String ReceiverPhone
+        +Double Weight
+        +Decimal DeclaredValue
+        +Decimal CodAmount
+        +Boolean IsInsured
+        +ToString() String
+    }
+    note for Waybill "Product"
+
+    class WaybillBuilder {
+        <<interface>>
+        +SetSender(sender: String) Void
+        +SetReceiver(name: String, phone: String) Void
+        +SetWeight(weight: Double) Void
+        +SetDeclaredValue(value: Decimal) Void
+        +SetCodAmount(amount: Decimal) Void
+        +SetInsurance(insured: Boolean) Void
+        +Build() Waybill
+    }
+    note for WaybillBuilder "Builder"
+
+    class StandardWaybillBuilder {
+        -Waybill _waybill
+        +SetSender(sender: String) Void
+        +SetReceiver(name: String, phone: String) Void
+        +SetWeight(weight: Double) Void
+        +SetDeclaredValue(value: Decimal) Void
+        +SetCodAmount(amount: Decimal) Void
+        +SetInsurance(insured: Boolean) Void
+        +Build() Waybill
+    }
+    note for StandardWaybillBuilder "ConcreteBuilder"
+
+    WaybillBuilder <|.. StandardWaybillBuilder : Realization
+    StandardWaybillBuilder *-- Waybill : Aggregation/Composition
+
+    class WaybillDirector {
+        -WaybillBuilder _builder
+        +WaybillDirector(builder: WaybillBuilder)
+        +ConstructFullWaybill(...) Waybill
+        +ConstructDocumentsWaybill(...) Waybill
+    }
+    note for WaybillDirector "Director"
+
+    WaybillDirector o-- WaybillBuilder : Association
+    
