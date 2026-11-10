@@ -1,0 +1,40 @@
+classDiagram
+    class IShipment {
+        <<interface>>
+        +GetDescription() string
+        +GetCost() decimal
+    }
+
+    class StandardShipment {
+        <<ConcreteComponent>>
+        +GetDescription() string
+        +GetCost() decimal
+    }
+
+    class ShipmentDecorator {
+        <<Decorator>>
+        #IShipment _shipment
+        +GetDescription() string
+        +GetCost() decimal
+    }
+
+    class InsuranceDecorator {
+        <<ConcreteDecorator>>
+        +InsuranceDecorator(IShipment shipment)
+        +GetDescription() string
+        +GetCost() decimal
+    }
+
+    class PackagingDecorator {
+        <<ConcreteDecorator>>
+        +PackagingDecorator(IShipment shipment)
+        +GetDescription() string
+        +GetCost() decimal
+    }
+
+    IShipment <|.. StandardShipment : реалізує
+    IShipment <|.. ShipmentDecorator : реалізує
+    ShipmentDecorator <|-- InsuranceDecorator : успадковує
+    ShipmentDecorator <|-- PackagingDecorator : успадковує
+    ShipmentDecorator o--> IShipment : містить (_shipment)
+    
