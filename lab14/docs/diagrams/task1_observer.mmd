@@ -1,0 +1,52 @@
+classDiagram
+    class IObserver {
+        <<interface>>
+        +string Name
+        +Update(string trackingNumber, string status)
+    }
+
+    class ISubject {
+        <<interface>>
+        +Attach(IObserver observer)
+        +Detach(IObserver observer)
+        +Notify()
+    }
+
+    class Shipment {
+        -List~IObserver~ _observers
+        +string TrackingNumber
+        -string _status
+        +string Status
+        +Attach(IObserver observer)
+        +Detach(IObserver observer)
+        +Notify()
+    }
+
+    class Sender {
+        +string Name
+        +Update(string trackingNumber, string status)
+    }
+
+    class Receiver {
+        +string Name
+        +Update(string trackingNumber, string status)
+    }
+
+    class AccountingDepartment {
+        +string Name
+        +Update(string trackingNumber, string status)
+    }
+
+    class OnlineStore {
+        +string Name
+        +Update(string trackingNumber, string status)
+    }
+
+    ISubject <|.. Shipment : реалізує
+    IObserver <|.. Sender : реалізує
+    IObserver <|.. Receiver : реалізує
+    IObserver <|.. AccountingDepartment : реалізує
+    IObserver <|.. OnlineStore : реалізує
+
+    Shipment o--> IObserver : сповіщає багатьох (_observers)
+    
