@@ -1,0 +1,93 @@
+@startuml task2_mediator
+skinparam classAttributeIconSize 0
+
+interface SortingCenterMediator <<Mediator>> {
+  + notify(sender : SortingDevice, event : String, data : Object) : void
+}
+
+abstract class SortingDevice <<Colleague>> {
+  # mediator : SortingCenterMediator
+  # deviceName : String
+  + SortingDevice(deviceName : String)
+  + setMediator(mediator : SortingCenterMediator) : void
+  + getDeviceName() : String
+}
+
+class SortingCenterCoordinator <<ConcreteMediator>> {
+  - conveyorBelt : ConveyorBelt
+  - scale : WarehouseScale
+  - scanner : BarcodeScanner
+  - sorter : DirectionSorter
+  - loadingZone : LoadingZone
+  - pendingBags : List<String>
+  + setConveyorBelt(conveyorBelt : ConveyorBelt) : void
+  + setScale(scale : WarehouseScale) : void
+  + setScanner(scanner : BarcodeScanner) : void
+  + setSorter(sorter : DirectionSorter) : void
+  + setLoadingZone(loadingZone : LoadingZone) : void
+  + notify(sender : SortingDevice, event : String, data : Object) : void
+}
+
+class ConveyorBelt <<ConcreteColleague>> {
+  - running : boolean
+  + feedParcel(parcel : SortingParcel) : void
+  + stop() : void
+  + start() : void
+  + isRunning() : boolean
+}
+
+class WarehouseScale <<ConcreteColleague>> {
+  - maxWeightKg : double
+  + weigh(parcel : SortingParcel) : void
+}
+
+class BarcodeScanner <<ConcreteColleague>> {
+  + scan(parcel : SortingParcel) : void
+}
+
+class DirectionSorter <<ConcreteColleague>> {
+  + routeParcel(parcel : SortingParcel) : void
+}
+
+class LoadingZone <<ConcreteColleague>> {
+  - vehicleDocked : boolean
+  - vehiclePlate : String
+  + requestBagLoading(bagCode : String) : void
+  + dockVehicle(plate : String) : void
+  + allowLoading(bagCode : String) : void
+  + denyLoading(bagCode : String) : void
+}
+
+class SortingParcel <<DomainEntity>> {
+  - trackingNumber : String
+  - weightKg : double
+  - destination : String
+}
+
+SortingCenterMediator <|.. SortingCenterCoordinator
+SortingDevice o--> "1" SortingCenterMediator : повідомляє про події
+
+SortingDevice <|-- ConveyorBelt
+SortingDevice <|-- WarehouseScale
+SortingDevice <|-- BarcodeScanner
+SortingDevice <|-- DirectionSorter
+SortingDevice <|-- LoadingZone
+
+SortingCenterCoordinator --> "1" ConveyorBelt : керує
+SortingCenterCoordinator --> "1" WarehouseScale : керує
+SortingCenterCoordinator --> "1" BarcodeScanner : керує
+SortingCenterCoordinator --> "1" DirectionSorter : керує
+SortingCenterCoordinator --> "1" LoadingZone : керує
+
+ConveyorBelt ..> SortingParcel
+WarehouseScale ..> SortingParcel
+BarcodeScanner ..> SortingParcel
+DirectionSorter ..> SortingParcel
+
+note top of SortingCenterCoordinator
+  Інкапсулює всі правила взаємодії:
+  перевантаження -> стоп стрічки,
+  сканування -> сортування,
+  перевірка подачі машини перед завантаженням.
+end note
+@enduml
