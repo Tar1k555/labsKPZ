@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\CHNU\\lab9java\\lab7kpz\\demo_c\\demo_c.csproj": {}
+    "C:\\CHNU\\lab12java\\lab7kpz\\demo_c\\demo_c.csproj": {}
   },
   "projects": {
-    "C:\\CHNU\\lab9java\\lab7kpz\\demo_c\\demo_c.csproj": {
+    "C:\\CHNU\\lab12java\\lab7kpz\\demo_c\\demo_c.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\CHNU\\lab9java\\lab7kpz\\demo_c\\demo_c.csproj",
+        "projectUniqueName": "C:\\CHNU\\lab12java\\lab7kpz\\demo_c\\demo_c.csproj",
         "projectName": "demo_c",
-        "projectPath": "C:\\CHNU\\lab9java\\lab7kpz\\demo_c\\demo_c.csproj",
+        "projectPath": "C:\\CHNU\\lab12java\\lab7kpz\\demo_c\\demo_c.csproj",
         "packagesPath": "C:\\Users\\lahnu\\.nuget\\packages\\",
-        "outputPath": "C:\\CHNU\\lab9java\\lab7kpz\\demo_c\\obj\\",
+        "outputPath": "C:\\CHNU\\lab12java\\lab7kpz\\demo_c\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
