@@ -1,0 +1,58 @@
+classDiagram
+    class INotificationChannel {
+        <<interface>>
+        +string ChannelName
+        +SendMessage(recipient, subject, body)
+    }
+
+    class SmsChannel {
+        +string ChannelName
+        +SendMessage(recipient, subject, body)
+    }
+
+    class ViberChannel {
+        +string ChannelName
+        +SendMessage(recipient, subject, body)
+    }
+
+    class EmailChannel {
+        +string ChannelName
+        +SendMessage(recipient, subject, body)
+    }
+
+    class TelegramChannel {
+        +string ChannelName
+        +SendMessage(recipient, subject, body)
+    }
+
+    INotificationChannel <|.. SmsChannel : реалізує
+    INotificationChannel <|.. ViberChannel : реалізує
+    INotificationChannel <|.. EmailChannel : реалізує
+    INotificationChannel <|.. TelegramChannel : реалізує
+
+    class Notification {
+        <<abstract>>
+        #INotificationChannel Channel
+        +SetChannel(channel)
+        +Notify(recipient, trackingNumber)*
+    }
+
+    class ArrivalNotification {
+        +Notify(recipient, trackingNumber)
+    }
+
+    class DelayNotification {
+        -string _reason
+        +Notify(recipient, trackingNumber)
+    }
+
+    class PaymentNotification {
+        -decimal _amount
+        +Notify(recipient, trackingNumber)
+    }
+
+    Notification <|-- ArrivalNotification : успадковує
+    Notification <|-- DelayNotification : успадковує
+    Notification <|-- PaymentNotification : успадковує
+
+    Notification o--> INotificationChannel : міст (агрегація)

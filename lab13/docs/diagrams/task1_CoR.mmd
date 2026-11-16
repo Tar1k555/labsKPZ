@@ -1,0 +1,43 @@
+classDiagram
+    class IShipmentHandler {
+        <<interface>>
+        +SetNext(IShipmentHandler handler) IShipmentHandler
+        +Handle(Shipment shipment)
+    }
+
+    class BaseShipmentHandler {
+        -IShipmentHandler _nextHandler
+        +SetNext(IShipmentHandler handler) IShipmentHandler
+        +Handle(Shipment shipment)
+    }
+
+    class InvoiceCheck {
+        +Handle(Shipment shipment)
+    }
+
+    class ProhibitedItemsCheck {
+        +Handle(Shipment shipment)
+    }
+
+    class WeightAndSizeCheck {
+        -double _maxWeight
+        +Handle(Shipment shipment)
+    }
+
+    class InternationalCheck {
+        +Handle(Shipment shipment)
+    }
+
+    class LithiumBatteryCheck {
+        +Handle(Shipment shipment)
+    }
+
+    IShipmentHandler <|.. BaseShipmentHandler : реалізує
+    BaseShipmentHandler <|-- InvoiceCheck : успадковує
+    BaseShipmentHandler <|-- ProhibitedItemsCheck : успадковує
+    BaseShipmentHandler <|-- WeightAndSizeCheck : успадковує
+    BaseShipmentHandler <|-- InternationalCheck : успадковує
+    BaseShipmentHandler <|-- LithiumBatteryCheck : успадковує
+
+    BaseShipmentHandler o--> IShipmentHandler : посилання на наступного (_nextHandler)
+    
