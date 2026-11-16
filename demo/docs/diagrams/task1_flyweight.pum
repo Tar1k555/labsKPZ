@@ -1,0 +1,49 @@
+@startuml task1_flyweight
+skinparam classAttributeIconSize 0
+
+class ShipmentType <<Flyweight>> {
+  - typeName : String
+  - icon : String
+  - color : String
+  + ShipmentType(typeName : String, icon : String, color : String)
+  + getTypeName() : String
+  + getIcon() : String
+  + getColor() : String
+  + toString() : String
+}
+
+class ShipmentTypeFactory <<FlyweightFactory>> {
+  - {static} cache : Map<String, ShipmentType>
+  + {static} getShipmentType(typeName : String, icon : String, color : String) : ShipmentType
+  + {static} getCreatedTypesCount() : int
+}
+
+class ShipmentMarker <<Context>> {
+  - waybillNumber : String
+  - latitude : double
+  - longitude : double
+  - status : String
+  - sharedType : ShipmentType
+  + ShipmentMarker(waybill : String, lat : double, lon : double, status : String, sharedType : ShipmentType)
+  + getSharedType() : ShipmentType
+  + getFullDescription() : String
+}
+
+class LogisticsMap <<Client>> {
+  - markers : List<ShipmentMarker>
+  + addShipment(waybill : String, lat : double, lon : double, status : String, typeName : String, icon : String, color : String) : void
+  + getTotalMarkersCount() : int
+  + getMarkersByType(typeName : String) : List<ShipmentMarker>
+}
+
+LogisticsMap *-- "0..*" ShipmentMarker : містить
+ShipmentMarker o-- "1" ShipmentType : посилається на спільний
+ShipmentTypeFactory o-- "0..*" ShipmentType : кешує
+LogisticsMap ..> ShipmentTypeFactory : отримує типи через
+
+note top of ShipmentType
+  Зберігає незмінний спільний стан
+  (іконку, колір, підпис) один раз
+  для всіх 20 000 позначок.
+end note
+@enduml

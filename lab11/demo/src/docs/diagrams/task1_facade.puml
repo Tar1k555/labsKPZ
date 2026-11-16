@@ -1,0 +1,53 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+class DeliveryFacade <<Facade>> {
+  - addressChecker : AddressChecker
+  - costCalculator : CostCalculator
+  - paymentProcessor : PaymentProcessor
+  - waybillGenerator : WaybillGenerator
+  - routePlanner : RoutePlanner
+  - recipientNotifier : RecipientNotifier
+  + shipPackage(sender, recipient, phone, address, weight, distance) : String
+  + getCostCalculator() : CostCalculator
+}
+
+class AddressChecker <<Subsystem>> {
+  + verifyAddress(address : String) : boolean
+}
+
+class CostCalculator <<Subsystem>> {
+  + calculate(weightKg : double, distanceKm : double) : double
+}
+
+class PaymentProcessor <<Subsystem>> {
+  + processPayment(shipmentId : String, amount : double) : boolean
+}
+
+class WaybillGenerator <<Subsystem>> {
+  + generate(sender : String, recipient : String) : String
+}
+
+class RoutePlanner <<Subsystem>> {
+  + planRoute(waybillNum : String, destination : String) : void
+}
+
+class RecipientNotifier <<Subsystem>> {
+  + sendNotification(phone : String, waybillNum : String) : void
+}
+
+class Main <<Client>>
+
+Main ..> DeliveryFacade : використовує
+DeliveryFacade *-- AddressChecker
+DeliveryFacade *-- CostCalculator
+DeliveryFacade *-- PaymentProcessor
+DeliveryFacade *-- WaybillGenerator
+DeliveryFacade *-- RoutePlanner
+DeliveryFacade *-- RecipientNotifier
+
+note top of DeliveryFacade
+  Об'єднує 6 підсистем у єдиний метод shipPackage().
+  Дозволяє доступ до CostCalculator окремо.
+end note
+@enduml

@@ -1,0 +1,33 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+interface TrackingService <<Subject>> {
+  + getStatus(trackingNumber : String) : String
+}
+
+class RealPartnerTrackingService <<RealSubject>> {
+  - paidRequestsCount : int
+  + getStatus(trackingNumber : String) : String
+  + getPaidRequestsCount() : int
+}
+
+class CachedTrackingProxy <<Proxy>> {
+  - realService : RealPartnerTrackingService
+  - cacheTtlMillis : long
+  - cache : Map<String, CacheEntry>
+  + getStatus(trackingNumber : String) : String
+  + getTotalPaidRequests() : int
+}
+
+class Main <<Client>>
+
+TrackingService <|.. RealPartnerTrackingService
+TrackingService <|.. CachedTrackingProxy
+CachedTrackingProxy o-- RealPartnerTrackingService : перехоплює запити
+Main ..> TrackingService : використовує інтерфейс
+
+note right of CachedTrackingProxy
+  Перевіряє кеш перед зверненням
+  до платного RealPartnerTrackingService.
+end note
+@enduml

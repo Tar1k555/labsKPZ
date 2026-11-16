@@ -1,0 +1,31 @@
+classDiagram
+    class ILocalScales {
+        <<interface>>
+        +GetWeightKg() decimal
+        +GetLengthCm() decimal
+    }
+
+    class LocalScales {
+        <<Target / Concrete>>
+        +GetWeightKg() decimal
+        +GetLengthCm() decimal
+    }
+
+    class PartnerScales {
+        <<Adaptee>>
+        +MeasureWeightInPounds() double
+        +MeasureLengthInInches() double
+    }
+
+    class ScalesAdapter {
+        <<Adapter>>
+        -PartnerScales _partnerScales
+        +ScalesAdapter(PartnerScales partnerScales)
+        +GetWeightKg() decimal
+        +GetLengthCm() decimal
+    }
+
+    ILocalScales <|.. LocalScales : реалізує
+    ILocalScales <|.. ScalesAdapter : реалізує
+    ScalesAdapter --> PartnerScales : делегує виклики (_partnerScales)
+    

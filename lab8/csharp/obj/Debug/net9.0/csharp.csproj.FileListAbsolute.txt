@@ -1,0 +1,15 @@
+D:\лаби чну\sw-design\7labs\lab7java\lab8\csharp\bin\Debug\net9.0\csharp.exe
+D:\лаби чну\sw-design\7labs\lab7java\lab8\csharp\bin\Debug\net9.0\csharp.deps.json
+D:\лаби чну\sw-design\7labs\lab7java\lab8\csharp\bin\Debug\net9.0\csharp.runtimeconfig.json
+D:\лаби чну\sw-design\7labs\lab7java\lab8\csharp\bin\Debug\net9.0\csharp.dll
+D:\лаби чну\sw-design\7labs\lab7java\lab8\csharp\bin\Debug\net9.0\csharp.pdb
+D:\лаби чну\sw-design\7labs\lab7java\lab8\csharp\obj\Debug\net9.0\csharp.GeneratedMSBuildEditorConfig.editorconfig
+D:\лаби чну\sw-design\7labs\lab7java\lab8\csharp\obj\Debug\net9.0\csharp.AssemblyInfoInputs.cache
+D:\лаби чну\sw-design\7labs\lab7java\lab8\csharp\obj\Debug\net9.0\csharp.AssemblyInfo.cs
+D:\лаби чну\sw-design\7labs\lab7java\lab8\csharp\obj\Debug\net9.0\csharp.csproj.CoreCompileInputs.cache
+D:\лаби чну\sw-design\7labs\lab7java\lab8\csharp\obj\Debug\net9.0\csharp.sourcelink.json
+D:\лаби чну\sw-design\7labs\lab7java\lab8\csharp\obj\Debug\net9.0\csharp.dll
+D:\лаби чну\sw-design\7labs\lab7java\lab8\csharp\obj\Debug\net9.0\refint\csharp.dll
+D:\лаби чну\sw-design\7labs\lab7java\lab8\csharp\obj\Debug\net9.0\csharp.pdb
+D:\лаби чну\sw-design\7labs\lab7java\lab8\csharp\obj\Debug\net9.0\csharp.genruntimeconfig.cache
+D:\лаби чну\sw-design\7labs\lab7java\lab8\csharp\obj\Debug\net9.0\ref\csharp.dll

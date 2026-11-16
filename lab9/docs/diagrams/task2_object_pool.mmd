@@ -1,0 +1,51 @@
+classDiagram
+    direction TB
+
+    class DeliveryVan {
+        -String vanId
+        -String currentCourier
+        -List~String~ cargoList
+        -int usageCount
+        +DeliveryVan(String vanId)
+        +void assignToCourier(String courierName, List~String~ cargo)
+        +void resetState()
+        +String getVanId()
+        +int getUsageCount()
+    }
+
+    class VanPool {
+        -List~DeliveryVan~ availableVans
+        -List~DeliveryVan~ inUseVans
+        -int maxPoolSize
+        -int totalCreatedVans
+        -Object lockObject
+        +VanPool(int maxPoolSize)
+        +DeliveryVan acquireVan(long timeoutMs)
+        +void releaseVan(DeliveryVan van)
+        +void printStatistics()
+        -DeliveryVan createVan()
+    }
+
+    class CourierTask {
+        -String courierName
+        -List~String~ cargo
+        -VanPool vanPool
+        +CourierTask(String courierName, List~String~ cargo, VanPool vanPool)
+        +void run()
+    }
+
+    class MainRunner {
+        +main(String[] args)$
+        +void runTask2Demo()$
+    }
+
+    VanPool "1" o-- "*" DeliveryVan : contains / manages >
+    CourierTask ..> VanPool : requests / releases van >
+    CourierTask ..> DeliveryVan : uses >
+    MainRunner ..> VanPool : initializes & monitors >
+    MainRunner ..> CourierTask : executes >
+
+    note for DeliveryVan "Role: Reusable Resource\nСлужбовий фургон із можливістю\nскидання стану (resetState)"
+    note for VanPool "Role: Object Pool / Manager\nУправляє обмеженим парком (max 3),\nконтролює видачу, повернення та чергу"
+    note for CourierTask "Role: Client / Resource User\nКур'єр, який запитує фургон,\nвиконує рейс і повертає його"
+    

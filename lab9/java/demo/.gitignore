@@ -1,0 +1,27 @@
+# Maven build directory (скомпільований код)
+target/
+*/target/
+
+# Java Compiled class files
+*.class
+
+# Log files
+*.log
+
+# VS Code settings & history
+.vscode/
+*.code-workspace
+
+# IntelliJ IDEA settings
+.idea/
+*.iml
+
+# Eclipse settings
+.metadata/
+.classpath
+.project
+.settings/
+
+# OS generated files
+.DS_Store
+Thumbs.db
