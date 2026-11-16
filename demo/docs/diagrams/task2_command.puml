@@ -1,0 +1,92 @@
+@startuml task2_command
+skinparam classAttributeIconSize 0
+
+interface WarehouseCommand <<Command>> {
+  + execute() : void
+  + undo() : void
+  + getDescription() : String
+}
+
+class MoveSectorCommand <<ConcreteCommand>> {
+  - warehouse : SortingWarehouse
+  - trackingNumber : String
+  - newSector : String
+  - previousSector : String
+  + execute() : void
+  + undo() : void
+  + getDescription() : String
+}
+
+class LoadVehicleCommand <<ConcreteCommand>> {
+  - warehouse : SortingWarehouse
+  - trackingNumber : String
+  - vehiclePlate : String
+  - previousSector : String
+  + execute() : void
+  + undo() : void
+  + getDescription() : String
+}
+
+class MarkDamageCommand <<ConcreteCommand>> {
+  - warehouse : SortingWarehouse
+  - trackingNumber : String
+  - damageReason : String
+  - previousDamagedState : boolean
+  - previousDamageNote : String
+  + execute() : void
+  + undo() : void
+  + getDescription() : String
+}
+
+class SortingWarehouse <<Receiver>> {
+  - parcels : Map<String, WarehouseParcel>
+  + registerParcel(parcel : WarehouseParcel) : void
+  + getParcel(trackingNumber : String) : WarehouseParcel
+  + moveParcelToSector(trackingNumber : String, targetSector : String) : void
+  + loadParcelIntoVehicle(trackingNumber : String, vehiclePlate : String) : void
+  + unloadParcelToSector(trackingNumber : String, returnSector : String) : void
+  + setParcelDamage(trackingNumber : String, damaged : boolean, note : String) : void
+}
+
+class WarehouseParcel <<DomainEntity>> {
+  - trackingNumber : String
+  - currentSector : String
+  - assignedVehicle : String
+  - damaged : boolean
+  - damageNote : String
+}
+
+class ScannerCommandInvoker <<Invoker>> {
+  - commandQueue : Queue<WarehouseCommand>
+  - executedHistory : Deque<WarehouseCommand>
+  - warehouseAuditLog : List<String>
+  + receiveFromScanner(command : WarehouseCommand) : void
+  + processAllQueuedCommands() : void
+  + undoLastOperation() : void
+  + printWarehouseLog() : void
+}
+
+class Main <<Client>>
+
+WarehouseCommand <|.. MoveSectorCommand
+WarehouseCommand <|.. LoadVehicleCommand
+WarehouseCommand <|.. MarkDamageCommand
+
+ScannerCommandInvoker o-- "0..*" WarehouseCommand : буферизує у черзі та історії
+SortingWarehouse *-- "0..*" WarehouseParcel : керує станом
+
+MoveSectorCommand --> "1" SortingWarehouse : викликає дії
+LoadVehicleCommand --> "1" SortingWarehouse : викликає дії
+MarkDamageCommand --> "1" SortingWarehouse : викликає дії
+
+Main ..> ScannerCommandInvoker : налаштовує та запускає
+Main ..> MoveSectorCommand : створює
+Main ..> LoadVehicleCommand : створює
+Main ..> MarkDamageCommand : створює
+
+note top of ScannerCommandInvoker
+  Приймає команди зі сканерів у чергу (FIFO),
+  виконує послідовно та зберігає стек (LIFO)
+  для скасування (Undo) і ведення журналу.
+end note
+@enduml
