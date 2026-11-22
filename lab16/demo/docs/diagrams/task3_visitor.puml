@@ -1,0 +1,100 @@
+@startuml task3_visitor
+skinparam classAttributeIconSize 0
+
+interface ShipmentVisitor <<Visitor>> {
+  + getOperationName() : String
+  + visit(letter : Letter) : void
+  + visit(parcel : Parcel) : void
+  + visit(cargo : FreightCargo) : void
+  + visit(international : InternationalShipment) : void
+}
+
+interface ShipmentElement <<Element>> {
+  + accept(visitor : ShipmentVisitor) : void
+  + getStateSummary() : String
+}
+
+abstract class BaseShipment {
+  - trackingNumber : String
+  - distanceKm : double
+  - calculatedCost : double
+  - customsStatus : String
+  - carbonFootprintKg : double
+  + getStateSummary() : String
+}
+
+class Letter <<ConcreteElement>> {
+  - registered : boolean
+  + accept(visitor : ShipmentVisitor) : void
+}
+
+class Parcel <<ConcreteElement>> {
+  - weightKg : double
+  - declaredValue : double
+  + accept(visitor : ShipmentVisitor) : void
+}
+
+class FreightCargo <<ConcreteElement>> {
+  - weightKg : double
+  - palletsCount : int
+  + accept(visitor : ShipmentVisitor) : void
+}
+
+class InternationalShipment <<ConcreteElement>> {
+  - weightKg : double
+  - destinationCountry : String
+  - hsCode : String
+  - customsValueEur : double
+  + accept(visitor : ShipmentVisitor) : void
+}
+
+class DeliveryCostVisitor <<ConcreteVisitor>> {
+  - totalBatchCost : double
+  + visit(letter : Letter) : void
+  + visit(parcel : Parcel) : void
+  + visit(cargo : FreightCargo) : void
+  + visit(international : InternationalShipment) : void
+}
+
+class CustomsDeclarationVisitor <<ConcreteVisitor>> {
+  - declarationsCount : int
+  + visit(letter : Letter) : void
+  + visit(parcel : Parcel) : void
+  + visit(cargo : FreightCargo) : void
+  + visit(international : InternationalShipment) : void
+}
+
+class CarbonFootprintVisitor <<ConcreteVisitor>> {
+  - totalCo2Kg : double
+  + visit(letter : Letter) : void
+  + visit(parcel : Parcel) : void
+  + visit(cargo : FreightCargo) : void
+  + visit(international : InternationalShipment) : void
+}
+
+class ShipmentBatch <<ObjectStructure>> {
+  - batchName : String
+  - shipments : List<ShipmentElement>
+  + addShipment(shipment : ShipmentElement) : void
+  + acceptVisitor(visitor : ShipmentVisitor) : void
+  + printStates(stageLabel : String) : void
+}
+
+ShipmentElement <|.. BaseShipment
+BaseShipment <|-- Letter
+BaseShipment <|-- Parcel
+BaseShipment <|-- FreightCargo
+BaseShipment <|-- InternationalShipment
+
+ShipmentVisitor <|.. DeliveryCostVisitor
+ShipmentVisitor <|.. CustomsDeclarationVisitor
+ShipmentVisitor <|.. CarbonFootprintVisitor
+
+ShipmentBatch o-- "0..*" ShipmentElement : містить набір
+ShipmentElement ..> ShipmentVisitor : приймає (Double Dispatch)
+
+note bottom of CarbonFootprintVisitor
+  Нова операція додається одним класом
+  без модифікації класів відправлень.
+end note
+@enduml
