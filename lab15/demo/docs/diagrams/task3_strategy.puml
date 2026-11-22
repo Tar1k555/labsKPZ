@@ -1,0 +1,65 @@
+@startuml task3_strategy
+skinparam classAttributeIconSize 0
+
+interface RouteStrategy <<Strategy>> {
+  + getStrategyName() : String
+  + buildRoute(stops : List<DeliveryStop>) : List<DeliveryStop>
+}
+
+class CourierNavigator <<Context>> {
+  - courierName : String
+  - strategy : RouteStrategy
+  + CourierNavigator(courierName : String, initialStrategy : RouteStrategy)
+  + setStrategy(strategy : RouteStrategy) : void
+  + buildAndDisplayRoute(stops : List<DeliveryStop>) : void
+}
+
+class DeliveryStop <<DomainEntity>> {
+  - address : String
+  - urgent : boolean
+  - distanceKm : double
+  - leftTurns : int
+  - trafficLevel : int
+  - co2EmissionKg : double
+}
+
+class ShortestDistanceStrategy <<ConcreteStrategy>> {
+  + getStrategyName() : String
+  + buildRoute(stops : List<DeliveryStop>) : List<DeliveryStop>
+}
+
+class UrgentPriorityStrategy <<ConcreteStrategy>> {
+  + getStrategyName() : String
+  + buildRoute(stops : List<DeliveryStop>) : List<DeliveryStop>
+}
+
+class MinimumLeftTurnsStrategy <<ConcreteStrategy>> {
+  + getStrategyName() : String
+  + buildRoute(stops : List<DeliveryStop>) : List<DeliveryStop>
+}
+
+class TrafficAwareStrategy <<ConcreteStrategy>> {
+  + getStrategyName() : String
+  + buildRoute(stops : List<DeliveryStop>) : List<DeliveryStop>
+}
+
+class EcoRouteStrategy <<ConcreteStrategy>> {
+  + getStrategyName() : String
+  + buildRoute(stops : List<DeliveryStop>) : List<DeliveryStop>
+}
+
+CourierNavigator o--> "1" RouteStrategy : використовує алгоритм
+CourierNavigator ..> DeliveryStop : планує маршрут
+
+RouteStrategy <|.. ShortestDistanceStrategy
+RouteStrategy <|.. UrgentPriorityStrategy
+RouteStrategy <|.. MinimumLeftTurnsStrategy
+RouteStrategy <|.. TrafficAwareStrategy
+RouteStrategy <|.. EcoRouteStrategy
+
+note right of EcoRouteStrategy
+  Новий принцип маршрутизації
+  додається одним класом без зміни
+  коду CourierNavigator.
+end note
+@enduml

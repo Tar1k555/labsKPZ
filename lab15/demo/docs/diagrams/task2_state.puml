@@ -1,0 +1,59 @@
+@startuml task2_state
+skinparam classAttributeIconSize 0
+
+interface ShipmentState <<State>> {
+  + getStateName() : String
+  + accept(shipment : ShipmentContext) : void
+  + dispatch(shipment : ShipmentContext) : void
+  + arriveAtBranch(shipment : ShipmentContext) : void
+  + deliver(shipment : ShipmentContext) : void
+  + changeAddress(shipment : ShipmentContext, newAddress : String) : void
+  + reroute(shipment : ShipmentContext, newAddress : String) : void
+  + passStorageDays(shipment : ShipmentContext, days : int) : void
+}
+
+class ShipmentContext <<Context>> {
+  - trackingNumber : String
+  - deliveryAddress : String
+  - daysAtBranch : int
+  - currentState : ShipmentState
+  + setState(newState : ShipmentState) : void
+  + accept() : void
+  + dispatch() : void
+  + arriveAtBranch() : void
+  + deliver() : void
+  + changeAddress(newAddress : String) : void
+  + reroute(newAddress : String) : void
+  + passStorageDays(days : int) : void
+}
+
+class CreatedState <<ConcreteState>>
+class AcceptedState <<ConcreteState>>
+class InTransitState <<ConcreteState>>
+class AtBranchState <<ConcreteState>> {
+  - {static} MAX_STORAGE_DAYS : int = 5
+}
+class DeliveredState <<ConcreteState>>
+class ReturnedToSenderState <<ConcreteState>>
+
+ShipmentContext o--> "1" ShipmentState : делегує поведінку
+
+ShipmentState <|.. CreatedState
+ShipmentState <|.. AcceptedState
+ShipmentState <|.. InTransitState
+ShipmentState <|.. AtBranchState
+ShipmentState <|.. DeliveredState
+ShipmentState <|.. ReturnedToSenderState
+
+CreatedState ..> AcceptedState : перехід
+AcceptedState ..> InTransitState : перехід
+InTransitState ..> AtBranchState : перехід
+AtBranchState ..> DeliveredState : перехід
+AtBranchState ..> ReturnedToSenderState : після 5 днів
+
+note top of ShipmentContext
+  Не містить if-else/switch за статусом.
+  Кожен стан сам визначає допустимі дії
+  та правила переходу до наступного стану.
+end note
+@enduml
