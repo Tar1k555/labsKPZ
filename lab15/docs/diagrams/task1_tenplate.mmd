@@ -1,0 +1,75 @@
+classDiagram
+    direction TB
+
+    class EventLogger {
+        <<Helper / Static Utility>>
+        -static int _tick
+        +static Log(source: string, message: string) void
+    }
+
+    class Shipment {
+        <<Domain Entity>>
+        +string TrackingNumber
+        +string RecipientName
+        +bool IsPaid
+        +decimal CashOnDeliveryAmount
+        +MarkAsPaid() void
+    }
+
+    class DeliveryProcessTemplate {
+        <<AbstractClass - Template Method>>
+        #ChannelName string
+        +Deliver(shipment: Shipment) void
+        #IdentifyRecipient(shipment: Shipment)* void
+        #VerifyPayment(shipment: Shipment) void
+        #AllowContentInspection(shipment: Shipment) bool
+        #InspectContent(shipment: Shipment) void
+        #HandOverShipment(shipment: Shipment) void
+        #ObtainConfirmation(shipment: Shipment)* void
+        #CloseWaybill(shipment: Shipment) void
+    }
+
+    class BranchDeliveryProcess {
+        <<ConcreteClass>>
+        -_branchCode string
+        #ChannelName string
+        #IdentifyRecipient(shipment: Shipment) void
+        #ObtainConfirmation(shipment: Shipment) void
+    }
+
+    class ParcelLockerDeliveryProcess {
+        <<ConcreteClass>>
+        -_lockerId string
+        #ChannelName string
+        #IdentifyRecipient(shipment: Shipment) void
+        #AllowContentInspection(shipment: Shipment) bool
+        #ObtainConfirmation(shipment: Shipment) void
+    }
+
+    class CourierDeliveryProcess {
+        <<ConcreteClass>>
+        -_courierName string
+        #ChannelName string
+        #IdentifyRecipient(shipment: Shipment) void
+        #ObtainConfirmation(shipment: Shipment) void
+    }
+
+    class Task1Runner {
+        <<Client / Scenario Runner>>
+        +RunScenario() void
+    }
+
+    DeliveryProcessTemplate <|-- BranchDeliveryProcess : 1..1
+    DeliveryProcessTemplate <|-- ParcelLockerDeliveryProcess : 1..1
+    DeliveryProcessTemplate <|-- CourierDeliveryProcess : 1..1
+
+    DeliveryProcessTemplate ..> Shipment : uses 1
+    DeliveryProcessTemplate ..> EventLogger : uses 1
+    BranchDeliveryProcess ..> EventLogger : uses 1
+    ParcelLockerDeliveryProcess ..> EventLogger : uses 1
+    CourierDeliveryProcess ..> EventLogger : uses 1
+
+    Task1Runner --> DeliveryProcessTemplate : executes 1..*
+    Task1Runner --> Shipment : creates 1..*
+    Task1Runner ..> EventLogger : uses 1
+    
