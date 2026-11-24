@@ -1,0 +1,105 @@
+classDiagram
+    direction TB
+
+    class EventLogger {
+        <<Helper / Static Utility>>
+        -static int _tick
+        +static Log(source: string, message: string) void
+    }
+
+    class ShipmentItem {
+        <<Domain Entity>>
+        +string TrackingNumber
+        +int RouteStopOrder
+        +decimal DeclaredValue
+        +string Description
+        +ToString() string
+    }
+
+    class MailBag {
+        <<Domain Composite Node>>
+        +string BagCode
+        -List~ShipmentItem~ _items
+        -List~MailBag~ _nestedBags
+        +AddItem(item: ShipmentItem) void
+        +AddNestedBag(bag: MailBag) void
+    }
+
+    class Pallet {
+        <<Domain Container>>
+        +string PalletCode
+        -List~MailBag~ _bags
+        +AddBag(bag: MailBag) void
+    }
+
+    class VehicleCargo {
+        <<ConcreteAggregate>>
+        -List~Pallet~ _pallets
+        +AddPallet(pallet: Pallet) void
+        ~CollectAllInLoadingOrder() IReadOnlyList~ShipmentItem~
+        ~CollectAllInUnloadingOrder() IReadOnlyList~ShipmentItem~
+        +CreateRouteOrderIterator() IShipmentIterator
+        +CreateUnloadingOrderIterator() IShipmentIterator
+        +CreateDeclaredValueIterator() IShipmentIterator
+    }
+
+    class IShipmentIterator {
+        <<Iterator Interface>>
+        +string TraversalName
+        +HasNext() bool
+        +Next() ShipmentItem
+    }
+
+    class RouteOrderIterator {
+        <<ConcreteIterator>>
+        -List~ShipmentItem~ _orderedItems
+        -int _position
+        +string TraversalName
+        +HasNext() bool
+        +Next() ShipmentItem
+    }
+
+    class UnloadingOrderIterator {
+        <<ConcreteIterator>>
+        -IReadOnlyList~ShipmentItem~ _items
+        -int _position
+        +string TraversalName
+        +HasNext() bool
+        +Next() ShipmentItem
+    }
+
+    class DeclaredValueIterator {
+        <<ConcreteIterator>>
+        -List~ShipmentItem~ _valuableItems
+        -int _position
+        +string TraversalName
+        +HasNext() bool
+        +Next() ShipmentItem
+    }
+
+    class Task2Runner {
+        <<Client>>
+        +RunScenario() void
+    }
+
+    VehicleCargo o--> "*" Pallet : contains
+    Pallet o--> "*" MailBag : contains
+    MailBag o--> "*" MailBag : nested bags
+    MailBag o--> "*" ShipmentItem : contains
+
+    IShipmentIterator <|.. RouteOrderIterator
+    IShipmentIterator <|.. UnloadingOrderIterator
+    IShipmentIterator <|.. DeclaredValueIterator
+
+    VehicleCargo ..> RouteOrderIterator : creates
+    VehicleCargo ..> UnloadingOrderIterator : creates
+    VehicleCargo ..> DeclaredValueIterator : creates
+
+    RouteOrderIterator --> VehicleCargo : traverses 1
+    UnloadingOrderIterator --> VehicleCargo : traverses 1
+    DeclaredValueIterator --> VehicleCargo : traverses 1
+
+    Task2Runner --> VehicleCargo : uses 1
+    Task2Runner ..> IShipmentIterator : iterates via
+    Task2Runner ..> EventLogger : uses 1
+    

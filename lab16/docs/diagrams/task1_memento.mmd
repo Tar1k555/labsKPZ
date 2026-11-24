@@ -1,0 +1,54 @@
+classDiagram
+    direction TB
+
+    class EventLogger {
+        <<Helper / Static Utility>>
+        -static int _tick
+        +static Log(source: string, message: string) void
+    }
+
+    class AutomaticSorter {
+        <<Originator>>
+        -Dictionary~string, int~ _directionBins
+        -int _processedCount
+        -List~string~ _currentQueue
+        +ConfigureDirection(direction: string) void
+        +EnqueueParcel(parcelCode: string) void
+        +ProcessNextParcel(targetDirection: string) void
+        +SimulatePowerFailure() void
+        +SaveState(label: string) SorterMemento
+        +RestoreState(memento: SorterMemento) void
+        +PrintCurrentState(contextNote: string) void
+    }
+
+    class SorterMemento {
+        <<Memento>>
+        +string SnapshotLabel
+        +DateTime CreatedAt
+        ~Dictionary~string, int~ DirectionBins
+        ~int ProcessedCount
+        ~List~string~ CurrentQueue
+        ~SorterMemento(snapshotLabel: string, directionBins: Dictionary, processedCount: int, currentQueue: List)
+    }
+
+    class SorterHistory {
+        <<Caretaker>>
+        -Stack~SorterMemento~ _history
+        +Push(memento: SorterMemento) void
+        +PopLast() SorterMemento
+        +FindByLabel(label: string) SorterMemento
+    }
+
+    class Task1Runner {
+        <<Client>>
+        +RunScenario() void
+    }
+
+    AutomaticSorter ..> SorterMemento : creates / restores 1
+    SorterHistory o--> "*" SorterMemento : stores
+    Task1Runner --> AutomaticSorter : uses 1
+    Task1Runner --> SorterHistory : uses 1
+    AutomaticSorter ..> EventLogger : uses 1
+    SorterHistory ..> EventLogger : uses 1
+    Task1Runner ..> EventLogger : uses 1
+    
